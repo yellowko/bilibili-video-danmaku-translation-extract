@@ -6,7 +6,7 @@
 // @updateURL    https://github.com/yellowko/bilibili-video-danmaku-translation-extract/raw/master/B%E7%AB%99%E8%A7%86%E9%A2%91%E5%90%8C%E4%BC%A0%E5%BC%B9%E5%B9%95%E6%8F%90%E5%8F%96.user.js
 // @downloadURL  https://github.com/yellowko/bilibili-video-danmaku-translation-extract/raw/master/B%E7%AB%99%E8%A7%86%E9%A2%91%E5%90%8C%E4%BC%A0%E5%BC%B9%E5%B9%95%E6%8F%90%E5%8F%96.user.js
 // @supportURL   https://github.com/yellowko/bilibili-video-danmaku-translation-extract/issues
-// @homepage     https://github.com/yellowko/bilibili-video-danmaku-translation-extract/
+// @homepage     https://github.com/yellowko/bilibili-video-danmaku-translation-extract
 // @require      https://code.jquery.com/jquery-3.4.0.min.js
 // @require      https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.js
 // @match        https://www.bilibili.com/video/*

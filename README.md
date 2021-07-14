@@ -2,6 +2,11 @@
 用于提取B站视频中的同传弹幕，主要针对有标准格式同传弹幕（下称字幕）的VTB的直播回放。
 参考了[Bilibili Live Danmaku Filter](https://greasyfork.org/en/scripts/386759-bilibili-live-danmaku-filter)的部分代码。
 
+# 安装
+本脚本运行基于油猴脚本，需要先安装[油猴脚本](https://www.tampermonkey.net/)。
+
+之后再安装本脚本[点此安装](https://github.com/yellowko/bilibili-video-danmaku-translation-extract/)
+
 ## 使用方法
 打开一个B站视频，**如果匹配到**，会在视频里出现一个有字幕的框，里面的字幕会随视频进度更新。只有当视频时间到达字幕时间戳的位置时才会自动滚动，检测频率一秒一次。如果发现长时间没有自动滚动，请不要惊慌，有可能是这段时间里没有到达字幕的触发点。
 

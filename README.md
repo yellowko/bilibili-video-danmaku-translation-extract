@@ -5,7 +5,9 @@
 # 安装
 本脚本运行基于油猴脚本，需要先安装[油猴脚本](https://www.tampermonkey.net/)。
 
-之后再安装本脚本[点此安装](https://github.com/yellowko/bilibili-video-danmaku-translation-extract/raw/master/B%E7%AB%99%E8%A7%86%E9%A2%91%E5%90%8C%E4%BC%A0%E5%BC%B9%E5%B9%95%E6%8F%90%E5%8F%96.user.js)
+之后再安装本脚本        
+[点此安装(github源)](https://github.com/yellowko/bilibili-video-danmaku-translation-extract/raw/master/B%E7%AB%99%E8%A7%86%E9%A2%91%E5%90%8C%E4%BC%A0%E5%BC%B9%E5%B9%95%E6%8F%90%E5%8F%96.user.js)  
+[点此安装(greasyfork源)](https://greasyfork.org/scripts/429385-b%E7%AB%99%E8%A7%86%E9%A2%91%E5%90%8C%E4%BC%A0%E5%BC%B9%E5%B9%95%E6%8F%90%E5%8F%96/code/B%E7%AB%99%E8%A7%86%E9%A2%91%E5%90%8C%E4%BC%A0%E5%BC%B9%E5%B9%95%E6%8F%90%E5%8F%96.user.js)
 
 ## 使用方法
 打开一个B站视频，**如果匹配到**，会在视频里出现一个有字幕的框，里面的字幕会随视频进度更新。只有当视频时间到达字幕时间戳的位置时才会自动滚动，检测频率一秒一次。如果发现长时间没有自动滚动，请不要惊慌，有可能是这段时间里没有到达字幕的触发点。

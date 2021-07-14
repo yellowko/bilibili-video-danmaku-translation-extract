@@ -1,8 +1,9 @@
 // ==UserScript==
 // @name         B站视频同传弹幕提取
-// @version      0.0.1
+// @version      0.0.2
 // @description  用于提取在B站视频里的同传弹幕，主要针对直播回放
 // @author       yellowko
+// @namespace    www.yellowko.com
 // @updateURL    https://github.com/yellowko/bilibili-video-danmaku-translation-extract/raw/master/B%E7%AB%99%E8%A7%86%E9%A2%91%E5%90%8C%E4%BC%A0%E5%BC%B9%E5%B9%95%E6%8F%90%E5%8F%96.user.js
 // @downloadURL  https://github.com/yellowko/bilibili-video-danmaku-translation-extract/raw/master/B%E7%AB%99%E8%A7%86%E9%A2%91%E5%90%8C%E4%BC%A0%E5%BC%B9%E5%B9%95%E6%8F%90%E5%8F%96.user.js
 // @supportURL   https://github.com/yellowko/bilibili-video-danmaku-translation-extract/issues
@@ -54,15 +55,20 @@
                                 let danmaku = $(this).text();
                                 if (retTranslation.test(danmaku)) {
                                     let time = parseInt($(this)[0].outerHTML.match(retTime)[0] * 1000);
-                                    let tanslation;
+                                    let tanslation = "";
                                     let j = 1;
                                     let matchres = danmaku.match(retTranslation);
-                                    for (; j < matchres.length; j++) {
-                                        if (matchres[j] != null && matchres[j] != "") {
-                                            tanslation = danmaku.match(retTranslation)[j];
-                                            break;
-                                        }
+                                    if (matchres[1] != null) {
+                                        if (matchres[1] != "")
+                                            tanslation = matchres[1] + "：";
+                                        tanslation += matchres[2];
                                     }
+                                    else{
+                                        if (matchres[3] != "")
+                                            tanslation = matchres[3] + "：";
+                                        tanslation += matchres[4];
+                                    }
+
                                     let danmakuObj = new Object();
                                     danmakuObj.time = time;
                                     danmakuObj.tanslation = tanslation;

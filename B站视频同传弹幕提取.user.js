@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         B站视频同传弹幕提取
-// @version      0.0.2
+// @version      0.0.3
 // @description  用于提取在B站视频里的同传弹幕，主要针对直播回放
 // @author       yellowko
 // @namespace    www.yellowko.com
@@ -41,8 +41,8 @@
         url: "https://api.bilibili.com/x/player/pagelist?bvid=" + bvid + "&jsonp=jsonp",
         onload: function (res) {
             if (res.status == 200) {
-                var text = res.responseText;
-                var json = JSON.parse(text);
+                let text = res.responseText;
+                let json = JSON.parse(text);
                 cid = json.data[page - 1].cid;
 
                 GM_xmlhttpRequest({
@@ -50,7 +50,7 @@
                     url: "https://api.bilibili.com/x/v1/dm/list.so?oid=" + cid,
                     onload: function (res) {
                         if (res.status == 200) {
-                            var text = res.responseText;
+                            let text = res.responseText;
                             $(text).find("d").each(function (i) {
                                 let danmaku = $(this).text();
                                 if (retTranslation.test(danmaku)) {
@@ -63,7 +63,7 @@
                                             tanslation = matchres[1] + "：";
                                         tanslation += matchres[2];
                                     }
-                                    else{
+                                    else {
                                         if (matchres[3] != "")
                                             tanslation = matchres[3] + "：";
                                         tanslation += matchres[4];
@@ -79,7 +79,21 @@
                             //本视频有同传弹幕，开始初始化
                             if (danmakuTranslation.length > 0) {
                                 //生成同传弹幕
-                                $(".bilibili-player-video").before('<div id="danmaku-warp" style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;"><div class="SubtitleBody Fullscreen ui-resizable"><div style="height:100%;position:relative;"><div class="SubtitleTextBodyFrame"><div class="SubtitleTextBody"></div></div></div><div class="ui-resizable-handle ui-resizable-e" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-s" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se" style="z-index: 90;"></div></div></div>');
+                                $(".bilibili-player-video").before(`
+                                    <div id="danmaku-warp" style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;">
+                                        <div class="SubtitleBody Fullscreen ui-resizable">
+                                            <div style="height:100%;position:relative;">
+                                                <div class="SubtitleTextBodyFrame">
+                                                    <div class="SubtitleTextBody"></div>
+                                                </div>
+                                            </div>
+                                            <div class="ui-resizable-handle ui-resizable-e" style="z-index: 90;"></div>
+                                            <div class="ui-resizable-handle ui-resizable-s" style="z-index: 90;"></div>
+                                            <div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se" style="z-index: 90;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                `);
                                 $(".SubtitleBody.Fullscreen").draggable({
                                     stop: function (event, ui) {
                                         ui.helper.removeAttr("style");
@@ -102,14 +116,22 @@
                                 setTimeout(function showTranslation() {
                                     if (danmakuTranslation.length > 0) {
                                         lastTime = currentTime;
-                                        currentTime = new Date("1970-1-1" + $(".bilibili-player-video-time-now").text()).getTime() - 7200000 + delay;
+                                        currentTime = time2sec($(".bilibili-player-video-time-now").text()) + delay;
 
                                         if (currentTime > delay && init == 0) {
 
                                             //同传弹幕延迟输入框，值为0时会关闭。（由于b站播放器是异步加载的，需要在播放器加载完毕后才能把同传弹幕绑定上去）
                                             init = 1;
                                             $(".SubtitleBody").show();
-                                            $(".bilibili-player-video-time").after('<div><input id="danmakuTranslation-delay" type ="number" value="' + delay + '" style="width: 60px;padding: 0 5px;height: 20px;font-size: 12px;color: hsla(0,0%,100%,.9);line-height: 20px;text-align: center;top: 0;left: 76px;background: hsla(0,0%,100%,.2);border: 1px solid transparent;"></div>')
+                                            $(".bilibili-player-video-time").after(`
+                                                <div>
+                                                    <input id="danmakuTranslation-delay" type="number" value="` + delay + `"
+                                                        style="width: 60px;padding: 0 5px;height: 20px;font-size: 12px;
+                                                        color: hsla(0,0%,100%,.9);line-height: 20px;text-align: center;
+                                                        top: 0;left: 76px;background: hsla(0,0%,100%,.2);
+                                                        border: 1px solid transparent;">
+                                                </div>
+                                            `)
                                             $("#danmakuTranslation-delay").on("change", () => {
                                                 delay = parseInt($("#danmakuTranslation-delay").val());
                                                 if (delay == 0) {
@@ -125,7 +147,7 @@
                                             //处理在同传弹幕上的双击
                                             $(".SubtitleTextBody").on("dblclick", "p", (event) => {
                                                 index = event.currentTarget.dataset.index;
-                                                let playerTime = new Date("1970-1-1" + $(".bilibili-player-video-time-now").text()).getTime() - 7200000;
+                                                let playerTime = time2sec($(".bilibili-player-video-time-now").text());
                                                 delay = danmakuTranslation[index].time - playerTime;
                                                 $("#danmakuTranslation-delay").val(delay);
                                                 $(".currentdanmaku").removeClass("currentdanmaku");
@@ -226,5 +248,20 @@ function sortBy(attr, rev) {
             return rev * 1;
         }
         return 0;
+    }
+}
+
+// 将格式 "min:sec" 或者 "hour:min:sec" 转换成秒
+function time2sec(time) {
+    if (time == "")
+        return 0;
+    let timeSplit = time.split(':');
+    switch (timeSplit.length) {
+        case 2:
+            return timeSplit[0] * 60000 + timeSplit[1] * 1000;
+        case 3:
+            return timeSplit[0] * 3600000 + timeSplit[1] * 60000 + timeSplit[2] * 1000;
+        default:
+            console.log("BDT:时间格式错误");
     }
 }
